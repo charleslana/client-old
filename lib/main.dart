@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'components/app_route_observer.dart';
+import 'data/load_images.dart';
 import 'routes/app_route_generator.dart';
 
 void main() async {
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    loadImages(context);
     final routeObserver = AppRouteObserver();
 
     return MaterialApp(
