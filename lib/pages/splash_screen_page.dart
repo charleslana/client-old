@@ -18,16 +18,50 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
   }
 
   Future<void> _redirectToLandingPage() async {
-    await Future<dynamic>.delayed(const Duration(seconds: 3))
-        .then((value) => replace(landingRoute));
+    await Future<dynamic>.delayed(const Duration(seconds: 2)).then(
+      (value) => replace(context, landingRoute),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
+    return SafeArea(
       child: Material(
-        child: Center(
-          child: Text('CL Games Apresenta'),
+        child: Container(
+          color: Colors.black,
+          child: const Padding(
+            padding: EdgeInsets.all(5),
+            child: Center(
+              child: SizedBox(
+                width: 200,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'CL GAMES',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'KesselBold',
+                        fontSize: 40,
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        'Apresenta',
+                        textAlign: TextAlign.end,
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );

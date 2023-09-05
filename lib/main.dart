@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:routemaster/routemaster.dart';
 
-import 'app.dart';
+import 'components/app_route_observer.dart';
+import 'routes/app_route_generator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,15 +23,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
+    final routeObserver = AppRouteObserver();
+
+    return MaterialApp(
       title: 'Client',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         fontFamily: 'NotoSans',
       ),
-      routerDelegate: routemaster,
-      routeInformationParser: const RoutemasterParser(),
+      initialRoute: '/',
+      onGenerateRoute: generateRoute,
+      navigatorObservers: [routeObserver],
     );
   }
 }

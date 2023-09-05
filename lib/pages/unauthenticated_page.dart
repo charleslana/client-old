@@ -7,17 +7,17 @@ class UnauthenticatedPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
+    return SafeArea(
       child: Material(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Você não está autenticado'),
-              SizedBox(height: 50),
+              const Text('Você não está autenticado'),
+              const SizedBox(height: 50),
               ElevatedButton(
-                onPressed: goToBack,
-                child: Text('Voltar'),
+                onPressed: () => goToBack(context),
+                child: const Text('Voltar'),
               ),
             ],
           ),

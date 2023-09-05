@@ -1,4 +1,3 @@
-import 'package:client/app.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -15,17 +14,21 @@ void closeToast() {
   fToast.removeCustomToast();
 }
 
-void navigate(String route) {
+void navigate(BuildContext context, String route) {
   closeToast();
-  routemaster.push(route);
+  Navigator.pushNamed(context, route);
 }
 
-void replace(String route) {
+void replace(BuildContext context, String route) {
   closeToast();
-  routemaster.replace(route);
+  Navigator.pushReplacementNamed(context, route);
 }
 
-void goToBack() {
+void goToBack(BuildContext context) {
   closeToast();
-  routemaster.history.back();
+  Navigator.of(context).popUntil((route) => route.isFirst);
+}
+
+void close(BuildContext context) {
+  Navigator.pop(context);
 }

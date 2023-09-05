@@ -1,9 +1,9 @@
-import 'package:client/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../app.dart';
+import '../providers/auth_provider.dart';
 import '../routes/app_routes.dart';
+import '../utils/utils.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -11,12 +11,12 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     void login() {
-      routemaster.push(loginRoute);
+      navigate(context, loginRoute);
     }
 
     void logout() {
       ref.watch(authProvider.notifier).state = false;
-      routemaster.push(loginRoute);
+      navigate(context, loginRoute);
     }
 
     return SafeArea(

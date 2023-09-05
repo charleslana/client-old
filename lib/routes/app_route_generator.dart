@@ -1,6 +1,6 @@
-import 'package:routemaster/routemaster.dart';
+import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 
-import '../components/custom_page.dart';
 import '../pages/home_page.dart';
 import '../pages/landing_page.dart';
 import '../pages/login_page.dart';
@@ -9,9 +9,37 @@ import '../pages/splash_screen_page.dart';
 import '../widget/auth_guard.dart';
 import 'app_routes.dart';
 
-final routes = RouteMap(routes: {
-  splashScreenRoute: (_) => const CustomPage(child: SplashScreenPage()),
-  landingRoute: (_) => const CustomPage(child: LandingPage()),
-  loginRoute: (_) => const CustomPage(child: LoginPage()),
-  homeRoute: (_) => const CustomPage(child: AuthGuard(child: HomePage())),
-}, onUnknownRoute: (_) => const CustomPage(child: NotFoundPage()));
+Route<dynamic> generateRoute(RouteSettings settings) {
+  switch (settings.name) {
+    case splashScreenRoute:
+      return _buildNoAnimationRoute(const SplashScreenPage(), settings);
+    case landingRoute:
+      return PageTransition(
+        child: const LandingPage(),
+        type: PageTransitionType.fade,
+        settings: settings,
+      );
+    case loginRoute:
+      return PageTransition(
+        child: const LoginPage(),
+        type: PageTransitionType.fade,
+        settings: settings,
+      );
+    case homeRoute:
+      return _buildNoAnimationRoute(
+          const AuthGuard(child: HomePage()), settings);
+    default:
+      return _buildNoAnimationRoute(const NotFoundPage(), settings);
+  }
+}
+
+PageRouteBuilder<dynamic> _buildNoAnimationRoute(
+    Widget page, RouteSettings settings) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => page,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return child;
+    },
+    settings: settings,
+  );
+}

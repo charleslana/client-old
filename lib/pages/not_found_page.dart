@@ -17,17 +17,13 @@ class NotFoundPage extends StatelessWidget {
               const Text('NotFound'),
               const SizedBox(height: 50),
               ElevatedButton(
-                onPressed: _restart,
-                child: const Text('Reiniciar'),
+                onPressed: () => replace(context, loginRoute),
+                child: const Text('Voltar'),
               ),
             ],
           ),
         ),
       ),
     );
-  }
-
-  void _restart() {
-    replace(splashScreenRoute);
   }
 }
