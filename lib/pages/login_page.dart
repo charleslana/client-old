@@ -6,9 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/images.dart';
 import '../helpers/handler_error.dart';
 import '../models/auth.dart';
-import '../models/token.dart';
 import '../models/user.dart';
 import '../routes/app_routes.dart';
+import '../services/user_character_service.dart';
 import '../services/user_service.dart';
 import '../utils/style_utils.dart';
 import '../utils/utils.dart';
@@ -29,7 +29,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final _passwordController = TextEditingController();
   final _passwordConfirmationController = TextEditingController();
   final _nameController = TextEditingController();
-  final user = UserService();
+  final _user = UserService();
+  final _userCharacter = UserCharacterService();
 
   @override
   void initState() {
@@ -42,7 +43,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   Future<void> _autoLogin() async {
     try {
       showLoading(context);
-      final auth = await user.getAuth();
+      final auth = await _user.getAuth();
       _emailController.text = auth.email;
       _passwordController.text = auth.password;
       await _login();
@@ -300,11 +301,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         email: _emailController.text,
         password: _passwordController.text,
       );
-      final token = await user.auth(auth);
-      await saveAuth(auth, token);
-      if (context.mounted) {
-        replace(context, characterChoiceRoute);
-      }
+      final token = await _user.auth(auth);
+      await _user.saveAuth(auth, token, ref);
+      await getData();
     } on DioException catch (e) {
       if (context.mounted) {
         close(context);
@@ -317,7 +316,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     if (_registerFormKey.currentState!.validate()) {
       try {
         showLoading(context);
-        await user.create(User(
+        await _user.create(User(
           email: _emailController.text,
           password: _passwordController.text,
           passwordConfirmation: _passwordConfirmationController.text,
@@ -335,8 +334,20 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     }
   }
 
-  Future<void> saveAuth(Auth auth, Token token) async {
-    await user.saveAuth(auth, token, ref);
+  Future<void> getData() async {
+    await getUserCharacter();
+    if (context.mounted) {
+      replace(context, characterChoiceRoute);
+    }
+  }
+
+  Future<void> getUserCharacter() async {
+    try {
+      final userCharacters = await _userCharacter.getAll();
+      _userCharacter.saveAuthCharacter(ref, userCharacters);
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
