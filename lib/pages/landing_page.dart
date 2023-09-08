@@ -1,10 +1,8 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../config/version.dart';
 import '../data/images.dart';
-import '../helpers/handler_error.dart';
 import '../routes/app_routes.dart';
 import '../services/public_service.dart';
 import '../utils/utils.dart';
@@ -17,9 +15,10 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
-  bool isLoading = true;
+  bool _isLoading = true;
+  String _dialogText = '';
 
-  final publicService = PublicService();
+  final _publicService = PublicService();
 
   @override
   void initState() {
@@ -31,17 +30,24 @@ class _LandingPageState extends State<LandingPage> {
 
   Future<void> _checkVersion() async {
     try {
-      final getVersion = await publicService.getVersion();
+      final getVersion = await _publicService.getVersion();
       if (getVersion == null && getVersion != version) {
+        setState(() {
+          _dialogText =
+              'Nova versão disponível, verifique na loja de sua aplicação.';
+        });
         _hideLoading();
-        _showDialog();
+        await _showDialog();
         return;
       }
       await _redirectToLoginPage();
-    } on DioException catch (e) {
-      if (context.mounted) {
-        getError(e, context);
-      }
+    } catch (e) {
+      setState(() {
+        _dialogText =
+            'O servidor não está respondendo, por favor tente novamente mais tarde';
+      });
+      _hideLoading();
+      await _showDialog();
     }
   }
 
@@ -51,17 +57,16 @@ class _LandingPageState extends State<LandingPage> {
         .then((value) => replace(context, loginRoute));
   }
 
-  void _showDialog() {
-    showDialog<dynamic>(
+  Future<void> _showDialog() async {
+    await showDialog<dynamic>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return WillPopScope(
           onWillPop: () async => false,
-          child: const AlertDialog(
-            content: Text(
-                'Nova versão disponível, verifique na loja de sua aplicação.'),
-            actions: [
+          child: AlertDialog(
+            content: Text(_dialogText),
+            actions: const [
               TextButton(
                 onPressed: SystemNavigator.pop,
                 child: Text('Sair'),
@@ -75,7 +80,7 @@ class _LandingPageState extends State<LandingPage> {
 
   void _hideLoading() {
     setState(() {
-      isLoading = false;
+      _isLoading = false;
     });
   }
 
@@ -125,7 +130,7 @@ class _LandingPageState extends State<LandingPage> {
                           ],
                         ),
                       ),
-                      if (isLoading) ...[
+                      if (_isLoading) ...[
                         const Column(
                           children: [
                             Text(

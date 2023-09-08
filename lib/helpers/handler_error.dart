@@ -1,12 +1,19 @@
-import 'package:client/utils/utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-void getError(DioException e, BuildContext context) {
+import '../models/handle_error.dart';
+import '../utils/utils.dart';
+
+Future<void> getError(DioException e, BuildContext context) async {
   if (e.response != null) {
-    showToast(context, e.response!.data.toString());
-  } else {
-    print(e.requestOptions);
-    print(e.message);
+    final error = HandleError.fromMap(e.response?.data);
+    if (error.errors != null) {
+      showToast(context, error.errors!.join(' '), error: true);
+      return;
+    }
+    showToast(context, error.message, error: true);
+    return;
   }
+  await showInfo(context,
+      'O servidor não está respondendo, por favor tente novamente mais tarde');
 }
