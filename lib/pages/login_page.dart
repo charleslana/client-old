@@ -5,12 +5,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/images.dart';
 import '../helpers/handler_error.dart';
+import '../models/auth.dart';
+import '../models/token.dart';
 import '../models/user.dart';
 import '../routes/app_routes.dart';
 import '../services/user_service.dart';
 import '../utils/style_utils.dart';
 import '../utils/utils.dart';
-import '../validators/register_form.dart';
+import '../validators/login_validator.dart';
+import '../validators/register_validator.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -20,12 +23,35 @@ class LoginPage extends ConsumerStatefulWidget {
 }
 
 class _LoginPageState extends ConsumerState<LoginPage> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _registerFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _passwordConfirmationController = TextEditingController();
   final _nameController = TextEditingController();
   final user = UserService();
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _autoLogin();
+    });
+    super.initState();
+  }
+
+  Future<void> _autoLogin() async {
+    try {
+      showLoading(context);
+      final auth = await user.getAuth();
+      _emailController.text = auth.email;
+      _passwordController.text = auth.password;
+      await _login();
+    } catch (e) {
+      if (context.mounted) {
+        close(context);
+      }
+    }
+  }
 
   Future<void> _showStartDialog() async {
     await showModalBottomSheet<dynamic>(
@@ -77,7 +103,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 bottom: MediaQuery.of(context).viewInsets.bottom + 30,
               ),
               child: Form(
-                key: _formKey,
+                key: _registerFormKey,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -190,62 +216,69 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 right: 20,
                 bottom: MediaQuery.of(context).viewInsets.bottom + 30,
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Wrap(
-                    alignment: WrapAlignment.spaceBetween,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      const Text('Faça login na sua conta!'),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(width: 2),
+              child: Form(
+                key: _loginFormKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Wrap(
+                      alignment: WrapAlignment.spaceBetween,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        const Text('Faça login na sua conta!'),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(width: 2),
+                          ),
+                          child: IconButton(
+                            icon: const Icon(Icons.close),
+                            onPressed: () => close(context),
+                          ),
                         ),
-                        child: IconButton(
-                          icon: const Icon(Icons.close),
-                          onPressed: () => close(context),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Informe o e-mail',
+                      ),
+                      validator: LoginValidator.validateEmail,
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: _passwordController,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        hintText: 'Informe a senha',
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            obscureText
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              obscureText = !obscureText;
+                            });
+                          },
                         ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  TextField(
-                    controller: _emailController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Informe o e-mail',
+                      obscureText: obscureText,
+                      validator: LoginValidator.validatePassword,
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  TextField(
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      hintText: 'Informe a senha',
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          obscureText ? Icons.visibility : Icons.visibility_off,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            obscureText = !obscureText;
-                          });
-                        },
-                      ),
+                    const SizedBox(height: 10),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await _formLogin();
+                      },
+                      child: const Text('Entrar'),
                     ),
-                    obscureText: obscureText,
-                  ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: () async {
-                      await _login();
-                    },
-                    child: const Text('Entrar'),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );
@@ -254,10 +287,34 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     );
   }
 
-  Future<void> _login() async {}
+  Future<void> _formLogin() async {
+    if (_loginFormKey.currentState!.validate()) {
+      await _login();
+    }
+  }
+
+  Future<void> _login() async {
+    try {
+      showLoading(context);
+      final auth = Auth(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+      final token = await user.auth(auth);
+      await saveAuth(auth, token);
+      if (context.mounted) {
+        replace(context, homeRoute);
+      }
+    } on DioException catch (e) {
+      if (context.mounted) {
+        close(context);
+        await getError(e, context);
+      }
+    }
+  }
 
   Future<void> _register() async {
-    if (_formKey.currentState!.validate()) {
+    if (_registerFormKey.currentState!.validate()) {
       try {
         showLoading(context);
         await user.create(User(
@@ -276,6 +333,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         }
       }
     }
+  }
+
+  Future<void> saveAuth(Auth auth, Token token) async {
+    await user.saveAuth(auth, token, ref);
   }
 
   @override

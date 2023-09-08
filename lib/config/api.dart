@@ -38,6 +38,16 @@ class ApiService {
   Future<Response<T>> deleteData<T>(String endpoint) async {
     return dio.delete<T>(endpoint);
   }
+
+  String getSetCookieFromHeader(Response<dynamic> response) {
+    final rawCookie = response.headers['set-cookie'];
+    final cookie = rawCookie?.first;
+    if (cookie != null) {
+      final int index = cookie.indexOf(';');
+      return (index == -1) ? cookie : cookie.substring(0, index);
+    }
+    return '';
+  }
 }
 
 class AppInterceptors extends Interceptor {

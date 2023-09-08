@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../data/images.dart';
+
 final fToast = FToast();
 
 void showToast(BuildContext context, String message, {bool error = false}) {
@@ -67,23 +69,40 @@ void showLoading(BuildContext context) {
     builder: (_) {
       return WillPopScope(
         onWillPop: () async => false,
-        child: const Dialog(
+        child: Dialog(
           elevation: 0,
           backgroundColor: Colors.transparent,
           child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircularProgressIndicator(),
-                SizedBox(height: 5),
-                Text(
-                  'Aguarde...',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 12,
+            child: Container(
+              width: 200,
+              height: 200,
+              padding: const EdgeInsets.all(5),
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(loadingBg),
+                  fit: BoxFit.contain,
+                ),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Transform.scale(
+                    scale: 0.5,
+                    child: const CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
                   ),
-                )
-              ],
+                  const SizedBox(height: 5),
+                  const Text(
+                    'Aguarde...',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.white,
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),

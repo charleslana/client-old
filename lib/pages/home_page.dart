@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../providers/auth_provider.dart';
 import '../routes/app_routes.dart';
+import '../services/user_service.dart';
 import '../utils/utils.dart';
 
 class HomePage extends ConsumerWidget {
@@ -10,13 +10,17 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final userService = UserService();
+
     void login() {
       navigate(context, loginRoute);
     }
 
-    void logout() {
-      ref.watch(authProvider.notifier).state = false;
-      navigate(context, loginRoute);
+    Future<void> logout() async {
+      await userService.logout(ref);
+      if (context.mounted) {
+        navigate(context, loginRoute);
+      }
     }
 
     return SafeArea(
