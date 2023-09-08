@@ -289,13 +289,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   Future<void> _formLogin() async {
     if (_loginFormKey.currentState!.validate()) {
+      showLoading(context);
       await _login();
     }
   }
 
   Future<void> _login() async {
     try {
-      showLoading(context);
       final auth = Auth(
         email: _emailController.text,
         password: _passwordController.text,

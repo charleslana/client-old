@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 
+import '../services/auth_service.dart';
+
 class ApiService {
   ApiService()
-      : dio = Dio(BaseOptions(
+      : _dio = Dio(BaseOptions(
           baseUrl: 'http://localhost:3000',
           connectTimeout: const Duration(seconds: 5),
           receiveTimeout: const Duration(seconds: 5),
@@ -17,26 +19,26 @@ class ApiService {
     _setupInterceptors();
   }
 
-  final Dio dio;
+  final Dio _dio;
 
   void _setupInterceptors() {
-    dio.interceptors.add(AppInterceptors());
+    _dio.interceptors.add(AppInterceptors());
   }
 
   Future<Response<T>> fetchData<T>(String endpoint) async {
-    return dio.get<T>(endpoint);
+    return _dio.get<T>(endpoint);
   }
 
   Future<Response<T>> postData<T>(String endpoint, dynamic data) async {
-    return dio.post<T>(endpoint, data: data);
+    return _dio.post<T>(endpoint, data: data);
   }
 
   Future<Response<T>> putData<T>(String endpoint, dynamic data) async {
-    return dio.put<T>(endpoint, data: data);
+    return _dio.put<T>(endpoint, data: data);
   }
 
   Future<Response<T>> deleteData<T>(String endpoint) async {
-    return dio.delete<T>(endpoint);
+    return _dio.delete<T>(endpoint);
   }
 
   String getSetCookieFromHeader(Response<dynamic> response) {
@@ -52,9 +54,13 @@ class ApiService {
 
 class AppInterceptors extends Interceptor {
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    const bearerToken = '';
-    options.headers['Authorization'] = 'Bearer $bearerToken';
-    super.onRequest(options, handler);
+  Future<void> onRequest(
+      RequestOptions options, RequestInterceptorHandler handler) async {
+    final authService = AuthService();
+    final authOptions = await authService.getAuthOptions();
+    final newOptions = options.copyWith(
+      headers: {...options.headers, ...authOptions.headers!},
+    );
+    super.onRequest(newOptions, handler);
   }
 }

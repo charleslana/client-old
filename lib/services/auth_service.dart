@@ -5,7 +5,7 @@ import 'shared_local_storage_service.dart';
 class AuthService {
   final _sharedLocalStorageService = SharedLocalStorageService();
 
-  Future<Options> getToken() async {
+  Future<Options> getAuthOptions() async {
     final cookie = await _getCookie();
     final token = await _getToken();
     return Options(
