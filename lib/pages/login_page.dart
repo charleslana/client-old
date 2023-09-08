@@ -303,7 +303,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       final token = await user.auth(auth);
       await saveAuth(auth, token);
       if (context.mounted) {
-        replace(context, homeRoute);
+        replace(context, characterChoiceRoute);
       }
     } on DioException catch (e) {
       if (context.mounted) {
