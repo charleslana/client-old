@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import '../enums/gender_enum.dart';
 import 'character.dart';
 
 class UserCharacter {
@@ -14,6 +15,7 @@ class UserCharacter {
     this.spentPoint,
     required this.gold,
     required this.experience,
+    required this.gender,
     required this.createdAt,
     required this.character,
   });
@@ -30,6 +32,7 @@ class UserCharacter {
       spentPoint: map['spentPoint'] != null ? map['spentPoint'] as int : null,
       gold: map['gold'] as int,
       experience: map['experience'] as int,
+      gender: GenderEnum.values.byName(map['gender']),
       createdAt: DateTime.parse(map['createdAt']),
       character: Character.fromMap(map['character'] as Map<String, dynamic>),
     );
@@ -53,6 +56,7 @@ class UserCharacter {
   final int? spentPoint;
   final int gold;
   final int experience;
+  final GenderEnum gender;
   final DateTime createdAt;
   final Character character;
 
@@ -67,6 +71,7 @@ class UserCharacter {
     int? spentPoint,
     int? gold,
     int? experience,
+    GenderEnum? gender,
     DateTime? createdAt,
     Character? character,
   }) {
@@ -81,6 +86,7 @@ class UserCharacter {
       spentPoint: spentPoint ?? this.spentPoint,
       gold: gold ?? this.gold,
       experience: experience ?? this.experience,
+      gender: gender ?? this.gender,
       createdAt: createdAt ?? this.createdAt,
       character: character ?? this.character,
     );
@@ -98,6 +104,7 @@ class UserCharacter {
       'spentPoint': spentPoint,
       'gold': gold,
       'experience': experience,
+      'gender': gender,
       'createdAt': createdAt.toIso8601String(),
       'character': character.toMap(),
     };

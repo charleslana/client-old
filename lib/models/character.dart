@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import '../enums/character_class_enum.dart';
+
 class Character {
   Character({
     required this.id,
@@ -14,7 +16,7 @@ class Character {
       name: map['name'] as String,
       description:
           map['description'] != null ? map['description'] as String : null,
-      characterClass: map['characterClass'] as String,
+      characterClass: CharacterClassEnum.values.byName(map['characterClass']),
     );
   }
 
@@ -24,13 +26,13 @@ class Character {
   final int id;
   final String name;
   final String? description;
-  final String characterClass;
+  final CharacterClassEnum characterClass;
 
   Character copyWith({
     int? id,
     String? name,
     String? description,
-    String? characterClass,
+    CharacterClassEnum? characterClass,
   }) {
     return Character(
       id: id ?? this.id,

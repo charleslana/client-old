@@ -44,21 +44,28 @@ void closeToast() {
 
 void navigate(BuildContext context, String route) {
   closeToast();
+  closeKeyboard();
   Navigator.pushNamed(context, route);
 }
 
 void replace(BuildContext context, String route) {
-  closeToast();
+  goToBack(context);
   Navigator.pushReplacementNamed(context, route);
 }
 
 void goToBack(BuildContext context) {
   closeToast();
+  closeKeyboard();
   Navigator.of(context).popUntil((route) => route.isFirst);
 }
 
 void close(BuildContext context) {
+  closeKeyboard();
   Navigator.pop(context);
+}
+
+void closeKeyboard() {
+  FocusManager.instance.primaryFocus?.unfocus();
 }
 
 void showLoading(BuildContext context) {
