@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../config/api.dart';
 import '../models/auth.dart';
+import '../models/register.dart';
 import '../models/token.dart';
 import '../models/user.dart';
 import '../providers/auth_provider.dart';
@@ -12,8 +13,8 @@ class UserService {
   final _apiService = ApiService();
   final _sharedLocalStorageService = SharedLocalStorageService();
 
-  Future<void> create(User user) async {
-    await _apiService.postData<Object>(_baseUrl, user.toJson());
+  Future<void> create(Register register) async {
+    await _apiService.postData<Object>(_baseUrl, register.toJson());
   }
 
   Future<Token> auth(Auth auth) async {
@@ -22,6 +23,12 @@ class UserService {
     final getAuth = Token.fromMap(response.data!)
       ..cookie = _apiService.getSetCookieFromHeader(response);
     return getAuth;
+  }
+
+  Future<User> getProfile() async {
+    final response =
+        await _apiService.fetchData<Map<String, dynamic>>('$_baseUrl/profile');
+    return User.fromMap(response.data!);
   }
 
   Future<void> saveAuth(Auth auth, Token token, WidgetRef ref) async {

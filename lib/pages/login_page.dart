@@ -6,7 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/images.dart';
 import '../helpers/handler_error.dart';
 import '../models/auth.dart';
-import '../models/user.dart';
+import '../models/register.dart';
+import '../providers/user_provider.dart';
 import '../routes/app_routes.dart';
 import '../services/user_character_service.dart';
 import '../services/user_service.dart';
@@ -303,7 +304,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       );
       final token = await _user.auth(auth);
       await _user.saveAuth(auth, token, ref);
-      await getData();
+      await _getData();
     } on DioException catch (e) {
       if (context.mounted) {
         close(context);
@@ -316,15 +317,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     if (_registerFormKey.currentState!.validate()) {
       try {
         showLoading(context);
-        await _user.create(User(
+        await _user.create(Register(
           email: _emailController.text,
           password: _passwordController.text,
           passwordConfirmation: _passwordConfirmationController.text,
           name: _nameController.text,
         ));
-        if (context.mounted) {
-          replace(context, homeRoute);
-        }
+        await _login();
       } on DioException catch (e) {
         if (context.mounted) {
           close(context);
@@ -334,17 +333,27 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     }
   }
 
-  Future<void> getData() async {
-    await getUserCharacter();
+  Future<void> _getData() async {
+    await _getUserCharacter();
+    await _getUserProfile();
     if (context.mounted) {
       replace(context, characterChoiceRoute);
     }
   }
 
-  Future<void> getUserCharacter() async {
+  Future<void> _getUserCharacter() async {
     try {
       final userCharacters = await _userCharacter.getAll();
       _userCharacter.saveAuthCharacter(ref, userCharacters);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> _getUserProfile() async {
+    try {
+      final user = await _user.getProfile();
+      ref.read(userProvider.notifier).state = user;
     } catch (e) {
       print(e);
     }

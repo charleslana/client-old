@@ -7,7 +7,7 @@ import '../services/auth_service.dart';
 class ApiService {
   ApiService()
       : _dio = Dio(BaseOptions(
-          baseUrl: 'http://localhost:3000',
+          baseUrl: 'http://192.168.0.102:3000',
           connectTimeout: const Duration(seconds: 5),
           receiveTimeout: const Duration(seconds: 5),
           headers: {
