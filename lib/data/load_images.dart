@@ -7,6 +7,7 @@ Future<void> loadImages(BuildContext context) async {
     precacheImage(const AssetImage(loginBg), context),
     precacheImage(const AssetImage(loadingBg), context),
     precacheImage(const AssetImage(characterChoiceBg), context),
+    precacheImage(const AssetImage(characterCreateBg), context),
     precacheImage(const AssetImage(button1Bg), context),
     precacheImage(const AssetImage(selectCharacterBg), context),
     precacheImage(const AssetImage(plusWhiteIcon), context),

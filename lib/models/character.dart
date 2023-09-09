@@ -23,6 +23,11 @@ class Character {
   factory Character.fromJson(String source) =>
       Character.fromMap(json.decode(source) as Map<String, dynamic>);
 
+  static List<Character> listFromJson(List<dynamic> list) =>
+      List<Character>.from(
+          // ignore: unnecessary_lambdas
+          list.map((dynamic e) => Character.fromMap(e)));
+
   final int id;
   final String name;
   final String? description;

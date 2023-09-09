@@ -13,7 +13,7 @@ class UserCharacterService {
     return UserCharacter.listFromJson(response.data!);
   }
 
-  void saveAuthCharacter(WidgetRef ref, List<UserCharacter> userCharacters) {
+  void saveUserCharacters(WidgetRef ref, List<UserCharacter> userCharacters) {
     ref.read(userCharactersProvider.notifier).state = userCharacters;
   }
 }

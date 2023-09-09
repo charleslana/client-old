@@ -85,20 +85,23 @@ class _CharacterChoicePageState extends ConsumerState<CharacterChoicePage> {
                       ),
                       itemCount: _availableQuantity,
                       itemBuilder: (BuildContext context, int index) {
-                        return Container(
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage(selectCharacterBg),
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                          child: Center(
-                            child: SizedBox(
-                              width: screenWidth / 10,
-                              height: screenHeight / 10,
-                              child: Image.asset(
-                                plusWhiteIcon,
+                        return InkWell(
+                          onTap: () => navigate(context, characterCreateRoute),
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage(selectCharacterBg),
                                 fit: BoxFit.contain,
+                              ),
+                            ),
+                            child: Center(
+                              child: SizedBox(
+                                width: screenWidth / 10,
+                                height: screenHeight / 10,
+                                child: Image.asset(
+                                  plusWhiteIcon,
+                                  fit: BoxFit.contain,
+                                ),
                               ),
                             ),
                           ),

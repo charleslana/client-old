@@ -9,6 +9,7 @@ import '../models/auth.dart';
 import '../models/register.dart';
 import '../providers/user_provider.dart';
 import '../routes/app_routes.dart';
+import '../services/character_service.dart';
 import '../services/user_character_service.dart';
 import '../services/user_service.dart';
 import '../utils/style_utils.dart';
@@ -32,6 +33,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final _nameController = TextEditingController();
   final _user = UserService();
   final _userCharacter = UserCharacterService();
+  final _character = CharacterService();
 
   @override
   void initState() {
@@ -334,17 +336,18 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   Future<void> _getData() async {
-    await _getUserCharacter();
+    await _getUserCharacters();
     await _getUserProfile();
+    await _geCharacters();
     if (context.mounted) {
       replace(context, characterChoiceRoute);
     }
   }
 
-  Future<void> _getUserCharacter() async {
+  Future<void> _getUserCharacters() async {
     try {
       final userCharacters = await _userCharacter.getAll();
-      _userCharacter.saveAuthCharacter(ref, userCharacters);
+      _userCharacter.saveUserCharacters(ref, userCharacters);
     } catch (e) {
       print(e);
     }
@@ -354,6 +357,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     try {
       final user = await _user.getProfile();
       ref.read(userProvider.notifier).state = user;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> _geCharacters() async {
+    try {
+      final characters = await _character.getAll();
+      _character.saveCharacters(ref, characters);
     } catch (e) {
       print(e);
     }

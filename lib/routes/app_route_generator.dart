@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../pages/character_choice_page.dart';
+import '../pages/character_create_page.dart';
 import '../pages/home_page.dart';
 import '../pages/landing_page.dart';
 import '../pages/login_page.dart';
@@ -33,6 +34,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return PageTransition(
         child: const AuthGuard(
           child: CharacterChoicePage(),
+        ),
+        type: PageTransitionType.fade,
+        settings: settings,
+      );
+    case characterCreateRoute:
+      return PageTransition(
+        child: const AuthGuard(
+          child: CharacterCreatePage(),
         ),
         type: PageTransitionType.fade,
         settings: settings,
