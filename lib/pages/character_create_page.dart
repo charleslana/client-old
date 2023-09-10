@@ -191,29 +191,53 @@ class _CharacterCreatePageState extends ConsumerState<CharacterCreatePage> {
                               ListTile(
                                 title: const Text('Gênero'),
                                 contentPadding: const EdgeInsets.all(0),
-                                subtitle: Row(
-                                  children: [
-                                    Radio<GenderEnum>(
-                                      value: GenderEnum.male,
-                                      groupValue: _genderSelected,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _genderSelected = value!;
-                                        });
-                                      },
-                                    ),
-                                    const Text('Masculino'),
-                                    Radio<GenderEnum>(
-                                      value: GenderEnum.female,
-                                      groupValue: _genderSelected,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _genderSelected = value!;
-                                        });
-                                      },
-                                    ),
-                                    const Text('Feminino'),
-                                  ],
+                                subtitle: GestureDetector(
+                                  child: Row(
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            _genderSelected = GenderEnum.male;
+                                          });
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Radio<GenderEnum>(
+                                              value: GenderEnum.male,
+                                              groupValue: _genderSelected,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  _genderSelected = value!;
+                                                });
+                                              },
+                                            ),
+                                            const Text('Masculino'),
+                                          ],
+                                        ),
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            _genderSelected = GenderEnum.female;
+                                          });
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Radio<GenderEnum>(
+                                              value: GenderEnum.female,
+                                              groupValue: _genderSelected,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  _genderSelected = value!;
+                                                });
+                                              },
+                                            ),
+                                            const Text('Feminino'),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                               Form(
