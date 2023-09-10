@@ -1,6 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../helpers/handler_error.dart';
 import '../providers/user_character_provider.dart';
 import '../routes/app_routes.dart';
 import '../services/user_character_service.dart';
@@ -22,10 +24,19 @@ class CustomDrawer extends ConsumerWidget {
       _userService.logout(ref).then((value) => replace(context, loginRoute));
     }
 
-    void logoutCharacter() {
-      _userCharacterService
-          .logout()
-          .then((value) => replace(context, characterChoiceRoute));
+    Future<void> logoutCharacter() async {
+      try {
+        showLoading(context);
+        await _userCharacterService.logout();
+        if (context.mounted) {
+          replace(context, characterChoiceRoute);
+        }
+      } on DioException catch (e) {
+        if (context.mounted) {
+          close(context);
+          await getError(e, context);
+        }
+      }
     }
 
     return SafeArea(
