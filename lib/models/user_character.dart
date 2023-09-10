@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import '../enums/gender_enum.dart';
 import 'character.dart';
+import 'user_character_group.dart';
 
 class UserCharacter {
   UserCharacter({
@@ -18,6 +19,7 @@ class UserCharacter {
     required this.gender,
     required this.createdAt,
     required this.character,
+    this.group,
   });
 
   factory UserCharacter.fromMap(Map<String, dynamic> map) {
@@ -35,6 +37,9 @@ class UserCharacter {
       gender: GenderEnum.values.byName(map['gender']),
       createdAt: DateTime.parse(map['createdAt']),
       character: Character.fromMap(map['character'] as Map<String, dynamic>),
+      group: map['group'] != null
+          ? UserCharacterGroup.fromMap(map['group'] as Map<String, dynamic>)
+          : null,
     );
   }
 
@@ -59,6 +64,7 @@ class UserCharacter {
   final GenderEnum gender;
   final DateTime createdAt;
   final Character character;
+  final UserCharacterGroup? group;
 
   UserCharacter copyWith({
     int? id,
@@ -74,6 +80,7 @@ class UserCharacter {
     GenderEnum? gender,
     DateTime? createdAt,
     Character? character,
+    UserCharacterGroup? group,
   }) {
     return UserCharacter(
       id: id ?? this.id,
@@ -89,6 +96,7 @@ class UserCharacter {
       gender: gender ?? this.gender,
       createdAt: createdAt ?? this.createdAt,
       character: character ?? this.character,
+      group: group ?? this.group,
     );
   }
 
@@ -107,6 +115,7 @@ class UserCharacter {
       'gender': gender,
       'createdAt': createdAt.toIso8601String(),
       'character': character.toMap(),
+      'group': group?.toMap(),
     };
   }
 

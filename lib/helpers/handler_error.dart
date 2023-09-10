@@ -7,6 +7,11 @@ import '../utils/utils.dart';
 Future<void> getError(DioException e, BuildContext context) async {
   if (e.response != null) {
     final int statusCode = e.response?.statusCode ?? 0;
+    if (statusCode == 500) {
+      await showInfo(context,
+          'Um problema foi encontrado nesta ação, por favor entre em contato com o suporte');
+      return;
+    }
     if (statusCode == 401) {
       await showUnauthenticated(context);
       return;

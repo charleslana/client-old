@@ -2,7 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../components/custom_shader_mask.dart';
 import '../data/images.dart';
+import '../enums/role_group_enum.dart';
 import '../helpers/handler_error.dart';
 import '../models/user_character.dart';
 import '../providers/user_character_provider.dart';
@@ -51,11 +53,13 @@ class _CharacterChoicePageState extends ConsumerState<CharacterChoicePage> {
             child: Column(
               children: [
                 Row(
-                  mainAxisAlignment: userCharacter.level < 100
+                  mainAxisAlignment: userCharacter.level < 100 &&
+                          userCharacter.group?.role != RoleGroupEnum.leader
                       ? MainAxisAlignment.spaceBetween
                       : MainAxisAlignment.end,
                   children: [
-                    if (userCharacter.level < 100) ...[
+                    if (userCharacter.level < 100 &&
+                        userCharacter.group?.role != RoleGroupEnum.leader) ...[
                       IconButton(
                         icon: const Icon(
                           Icons.delete,
@@ -228,10 +232,9 @@ class _CharacterChoicePageState extends ConsumerState<CharacterChoicePage> {
                                     clipBehavior: Clip.none,
                                     children: [
                                       Align(
-                                        child: Image.asset(
-                                          getCharacterImage(
+                                        child: CustomShaderMask(
+                                          image: getCharacterImage(
                                               userCharacter.character.id),
-                                          fit: BoxFit.contain,
                                         ),
                                       ),
                                       Positioned(
