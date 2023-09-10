@@ -8,7 +8,7 @@ import '../pages/landing_page.dart';
 import '../pages/login_page.dart';
 import '../pages/not_found_page.dart';
 import '../pages/splash_screen_page.dart';
-import '../widget/auth_guard.dart';
+import '../widgets/auth_guard.dart';
 import 'app_routes.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {

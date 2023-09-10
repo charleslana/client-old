@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../data/images.dart';
+import '../routes/app_routes.dart';
 
 final fToast = FToast();
 
@@ -62,6 +63,10 @@ void goToBack(BuildContext context) {
 void close(BuildContext context) {
   closeKeyboard();
   Navigator.pop(context);
+}
+
+void closeAll(BuildContext context) {
+  Navigator.of(context).popUntil((route) => route.isFirst);
 }
 
 void closeKeyboard() {
@@ -134,6 +139,70 @@ Future<void> showInfo(BuildContext context, String message) async {
             ),
           ],
         ),
+      );
+    },
+  );
+}
+
+Future<void> showUnauthenticated(BuildContext context) async {
+  await showDialog<dynamic>(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return WillPopScope(
+        onWillPop: () async => false,
+        child: AlertDialog(
+          content: const Text('Você foi desconectado'),
+          actions: [
+            TextButton(
+              onPressed: () => replace(context, loginRoute),
+              child: const Text('Re-entrar'),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+Future<void> showForbidden(BuildContext context) async {
+  await showDialog<dynamic>(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return WillPopScope(
+        onWillPop: () async => false,
+        child: AlertDialog(
+          content: const Text('Sua sessão expirou, selecione o personagem'),
+          actions: [
+            TextButton(
+              onPressed: () => replace(context, characterChoiceRoute),
+              child: const Text('Selecionar personagem'),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+Future<void> showConfirmationDialog(
+    BuildContext context, String message, VoidCallback callback) async {
+  await showDialog<dynamic>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => close(context),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: callback,
+            child: const Text('Confirmar'),
+          ),
+        ],
       );
     },
   );

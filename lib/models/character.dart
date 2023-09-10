@@ -52,7 +52,7 @@ class Character {
       'id': id,
       'name': name,
       'description': description,
-      'characterClass': characterClass,
+      'characterClass': characterClass.name,
     };
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../config/api.dart';
+import '../models/create_character.dart';
 import '../models/user_character.dart';
 import '../providers/user_character_provider.dart';
 
@@ -11,6 +12,16 @@ class UserCharacterService {
   Future<List<UserCharacter>> getAll() async {
     final response = await _apiService.fetchData<List<dynamic>>(_baseUrl);
     return UserCharacter.listFromJson(response.data!);
+  }
+
+  Future<UserCharacter> create(CreateCharacter create) async {
+    final response = await _apiService.postData<Map<String, dynamic>>(
+        _baseUrl, create.toJson());
+    return UserCharacter.fromMap(response.data!);
+  }
+
+  Future<void> delete(int id) async {
+    await _apiService.deleteData<void>('$_baseUrl/$id');
   }
 
   void saveUserCharacters(WidgetRef ref, List<UserCharacter> userCharacters) {
