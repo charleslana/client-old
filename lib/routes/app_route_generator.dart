@@ -45,7 +45,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
     case overviewRoute:
       return PageTransition(
-        child: const AuthGuard(
+        child: AuthGuard(
           child: OverviewPage(),
         ),
         type: PageTransitionType.fade,
