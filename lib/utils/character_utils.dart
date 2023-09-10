@@ -25,6 +25,31 @@ String getCharacterImage(int id) {
   }
 }
 
+String getCharacterPortrait(int id) {
+  switch (id) {
+    case 1:
+      return character1Portrait;
+    case 2:
+      return character2Portrait;
+    case 3:
+      return character3Portrait;
+    case 4:
+      return character4Portrait;
+    case 5:
+      return character5Portrait;
+    case 6:
+      return character6Portrait;
+    case 7:
+      return character7Portrait;
+    case 8:
+      return character8Portrait;
+    case 9:
+      return character9Portrait;
+    default:
+      return character1Portrait;
+  }
+}
+
 String getCharacterClassImage(int id) {
   switch (id) {
     case 1:

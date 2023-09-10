@@ -97,7 +97,6 @@ class _LandingPageState extends State<LandingPage> {
               alignment: Alignment.bottomCenter,
               fit: BoxFit.cover,
             ),
-            color: Color(0xff131f2f),
           ),
           child: Padding(
             padding: const EdgeInsets.all(5),

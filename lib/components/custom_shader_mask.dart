@@ -5,10 +5,12 @@ class CustomShaderMask extends StatelessWidget {
     Key? key,
     required this.image,
     this.fit = BoxFit.contain,
+    this.alignment = Alignment.center,
   }) : super(key: key);
 
   final String image;
   final BoxFit fit;
+  final Alignment alignment;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +39,7 @@ class CustomShaderMask extends StatelessWidget {
       child: Image.asset(
         image,
         fit: fit,
+        alignment: alignment,
       ),
     );
   }

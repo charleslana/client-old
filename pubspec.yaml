@@ -29,6 +29,7 @@ flutter:
     - assets/images/layout/
     - assets/images/icons/
     - assets/images/characters/
+    - assets/images/characters/portrait/
     - assets/images/classes/
 
   fonts:
