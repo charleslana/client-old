@@ -51,7 +51,9 @@ class _CharacterChoicePageState extends ConsumerState<CharacterChoicePage> {
             child: Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: userCharacter.level < 100
+                      ? MainAxisAlignment.spaceBetween
+                      : MainAxisAlignment.end,
                   children: [
                     if (userCharacter.level < 100) ...[
                       IconButton(
