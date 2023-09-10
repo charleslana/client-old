@@ -66,6 +66,7 @@ void close(BuildContext context) {
 }
 
 void closeAll(BuildContext context) {
+  closeKeyboard();
   Navigator.of(context).popUntil((route) => route.isFirst);
 }
 
