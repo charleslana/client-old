@@ -3,10 +3,10 @@ import 'package:page_transition/page_transition.dart';
 
 import '../pages/character_choice_page.dart';
 import '../pages/character_create_page.dart';
-import '../pages/home_page.dart';
 import '../pages/landing_page.dart';
 import '../pages/login_page.dart';
 import '../pages/not_found_page.dart';
+import '../pages/overview_page.dart';
 import '../pages/splash_screen_page.dart';
 import '../widgets/auth_guard.dart';
 import 'app_routes.dart';
@@ -27,9 +27,6 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         type: PageTransitionType.fade,
         settings: settings,
       );
-    case homeRoute:
-      return _buildNoAnimationRoute(
-          const AuthGuard(child: HomePage()), settings);
     case characterChoiceRoute:
       return PageTransition(
         child: const AuthGuard(
@@ -42,6 +39,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return PageTransition(
         child: const AuthGuard(
           child: CharacterCreatePage(),
+        ),
+        type: PageTransitionType.fade,
+        settings: settings,
+      );
+    case overviewRoute:
+      return PageTransition(
+        child: const AuthGuard(
+          child: OverviewPage(),
         ),
         type: PageTransitionType.fade,
         settings: settings,

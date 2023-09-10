@@ -81,67 +81,91 @@ class _CharacterChoicePageState extends ConsumerState<CharacterChoicePage> {
                   ],
                 ),
                 const SizedBox(height: 50),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Flexible(
-                      child: Text(
-                        'Nome',
-                        style: TextStyle(
-                          color: Colors.white,
+                Card(
+                  elevation: 0,
+                  margin: const EdgeInsets.only(bottom: 10),
+                  color: Colors.black.withOpacity(0.3),
+                  child: Padding(
+                    padding: const EdgeInsets.all(3),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Flexible(
+                          child: Text(
+                            'Nome',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
-                      ),
+                        Text(
+                          userCharacter.name,
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      userCharacter.name,
-                      style: const TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Flexible(
-                      child: Text(
-                        'Nível',
-                        style: TextStyle(
-                          color: Colors.white,
+                Card(
+                  elevation: 0,
+                  margin: const EdgeInsets.only(bottom: 10),
+                  color: Colors.black.withOpacity(0.3),
+                  child: Padding(
+                    padding: const EdgeInsets.all(3),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Flexible(
+                          child: Text(
+                            'Nível',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
-                      ),
+                        Text(
+                          userCharacter.level.toString(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      userCharacter.level.toString(),
-                      style: const TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Flexible(
-                      child: Text(
-                        'Classe',
-                        style: TextStyle(
-                          color: Colors.white,
+                Card(
+                  elevation: 0,
+                  margin: const EdgeInsets.only(bottom: 10),
+                  color: Colors.black.withOpacity(0.3),
+                  child: Padding(
+                    padding: const EdgeInsets.all(3),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Flexible(
+                          child: Text(
+                            'Classe',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
-                      ),
+                        Text(
+                          userCharacter.character.name,
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      userCharacter.character.name,
-                      style: const TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
                 const SizedBox(height: 50),
                 Button3Widget(
                   text: 'Selecionar',
-                  callback: () {},
+                  callback: () => _select(userCharacter),
                 ),
               ],
             ),
@@ -161,6 +185,21 @@ class _CharacterChoicePageState extends ConsumerState<CharacterChoicePage> {
       _userCharacterService.saveUserCharacters(ref, updatedUserCharacters);
       if (context.mounted) {
         closeAll(context);
+      }
+    } on DioException catch (e) {
+      if (context.mounted) {
+        close(context);
+        await getError(e, context);
+      }
+    }
+  }
+
+  Future<void> _select(UserCharacter userCharacter) async {
+    try {
+      showLoading(context);
+      await _userCharacterService.select(ref, userCharacter);
+      if (context.mounted) {
+        replace(context, overviewRoute);
       }
     } on DioException catch (e) {
       if (context.mounted) {

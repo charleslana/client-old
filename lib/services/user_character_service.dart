@@ -24,6 +24,15 @@ class UserCharacterService {
     await _apiService.deleteData<void>('$_baseUrl/$id');
   }
 
+  Future<void> select(WidgetRef ref, UserCharacter userCharacter) async {
+    await _apiService.fetchData<void>('$_baseUrl/select/${userCharacter.id}');
+    ref.read(userCharacterProvider.notifier).state = userCharacter;
+  }
+
+  Future<void> logout() async {
+    await _apiService.fetchData<void>('$_baseUrl/logout');
+  }
+
   void saveUserCharacters(WidgetRef ref, List<UserCharacter> userCharacters) {
     ref.read(userCharactersProvider.notifier).state = userCharacters;
   }
