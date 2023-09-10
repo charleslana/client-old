@@ -53,16 +53,18 @@ class _CharacterChoicePageState extends ConsumerState<CharacterChoicePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconButton(
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Colors.white,
+                    if (userCharacter.level < 100) ...[
+                      IconButton(
+                        icon: const Icon(
+                          Icons.delete,
+                          color: Colors.white,
+                        ),
+                        onPressed: () => showConfirmationDialog(
+                            context,
+                            'Deseja realmente excluir o personagem? Está ação é irreversível',
+                            () => _excluir(userCharacter.id)),
                       ),
-                      onPressed: () => showConfirmationDialog(
-                          context,
-                          'Deseja realmente excluir o personagem? Está ação é irreversível',
-                          () => _excluir(userCharacter.id)),
-                    ),
+                    ],
                     IconButton(
                       icon: const Icon(
                         Icons.close,
