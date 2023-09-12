@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../data/images.dart';
+
 class BottomNavigationMenu extends StatelessWidget {
   const BottomNavigationMenu({
     required this.scaffoldKey,
@@ -18,30 +20,30 @@ class BottomNavigationMenu extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.black.withOpacity(0.5),
         currentIndex: currentIndex,
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
+            icon: Image.asset(menuIcon, width: 24),
             label: 'Menu',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
+            icon: Image.asset(worldIcon, width: 24),
+            label: 'Mundo',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Favorites',
+            icon: Image.asset(bagIcon, width: 24),
+            label: 'Mochila',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: 'Cart',
+            icon: Image.asset(questIcon, width: 24),
+            label: 'Missões',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            label: 'Notifications',
+            icon: Image.asset(pvpIcon, width: 24),
+            label: 'PVP',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
+            icon: Image.asset(rankIcon, width: 24),
+            label: 'Rank',
           ),
         ],
         onTap: (index) {

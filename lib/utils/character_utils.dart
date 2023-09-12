@@ -1,4 +1,5 @@
 import '../data/images.dart';
+import '../enums/gender_enum.dart';
 
 String getCharacterImage(int id) {
   switch (id) {
@@ -72,5 +73,16 @@ String getCharacterClassImage(int id) {
       return class9;
     default:
       return class1;
+  }
+}
+
+String getGender(GenderEnum gender) {
+  switch (gender) {
+    case GenderEnum.male:
+      return 'Masculino';
+    case GenderEnum.female:
+      return 'Feminino';
+    default:
+      return 'Masculino';
   }
 }

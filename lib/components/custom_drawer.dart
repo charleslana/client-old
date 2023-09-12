@@ -41,8 +41,7 @@ class CustomDrawer extends ConsumerWidget {
 
     return SafeArea(
       child: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
+        child: Column(
           children: [
             UserAccountsDrawerHeader(
               accountName: Text(userCharacter.name),
@@ -55,15 +54,83 @@ class CustomDrawer extends ConsumerWidget {
                 color: Colors.blue,
               ),
             ),
-            ListTile(
-              title: const Text('Trocar de personagem'),
-              subtitle: const Text('Selecione outro personagem da conta'),
-              onTap: logoutCharacter,
+            Expanded(
+              flex: 5,
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.person),
+                    title: const Text('Trocar de personagem'),
+                    subtitle: const Text('Selecione outro personagem da conta'),
+                    onTap: logoutCharacter,
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.exit_to_app),
+                    title: const Text('Fazer logout'),
+                    subtitle: const Text('Sair da conta'),
+                    onTap: logout,
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.list),
+                    title: const Text('List'),
+                    subtitle: const Text('Subtitle'),
+                    onTap: logout,
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.list),
+                    title: const Text('List'),
+                    subtitle: const Text('Subtitle'),
+                    onTap: logout,
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.list),
+                    title: const Text('List'),
+                    subtitle: const Text('Subtitle'),
+                    onTap: logout,
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.list),
+                    title: const Text('List'),
+                    subtitle: const Text('Subtitle'),
+                    onTap: logout,
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.list),
+                    title: const Text('List'),
+                    subtitle: const Text('Subtitle'),
+                    onTap: logout,
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.list),
+                    title: const Text('List'),
+                    subtitle: const Text('Subtitle'),
+                    onTap: logout,
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.list),
+                    title: const Text('List'),
+                    subtitle: const Text('Subtitle'),
+                    onTap: logout,
+                  ),
+                ],
+              ),
             ),
-            ListTile(
-              title: const Text('Fazer logout'),
-              subtitle: const Text('Sair da conta'),
-              onTap: logout,
+            Expanded(
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: IconButton(
+                    onPressed: () => close(context),
+                    icon: const Icon(
+                      Icons.close,
+                      color: Colors.blue,
+                      size: 32,
+                    ),
+                  ),
+                ),
+              ),
             ),
           ],
         ),
