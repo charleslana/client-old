@@ -54,12 +54,14 @@ class _CharacterChoicePageState extends ConsumerState<CharacterChoicePage> {
               children: [
                 Row(
                   mainAxisAlignment: userCharacter.level < 100 &&
-                          userCharacter.group?.role != RoleGroupEnum.leader
+                          userCharacter.groupMember?.role !=
+                              RoleGroupEnum.leader
                       ? MainAxisAlignment.spaceBetween
                       : MainAxisAlignment.end,
                   children: [
                     if (userCharacter.level < 100 &&
-                        userCharacter.group?.role != RoleGroupEnum.leader) ...[
+                        userCharacter.groupMember?.role !=
+                            RoleGroupEnum.leader) ...[
                       IconButton(
                         icon: const Icon(
                           Icons.delete,
