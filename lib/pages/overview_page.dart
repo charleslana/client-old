@@ -10,6 +10,7 @@ import '../models/attribute_status.dart';
 import '../providers/user_character_provider.dart';
 import '../utils/character_utils.dart';
 import '../utils/style_utils.dart';
+import '../utils/utils.dart';
 import '../widgets/button4_widget.dart';
 
 class OverviewPage extends ConsumerWidget {
@@ -213,6 +214,7 @@ class OverviewPage extends ConsumerWidget {
                             ),
                             const Text(
                               'Atributos',
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
@@ -266,6 +268,38 @@ class OverviewPage extends ConsumerWidget {
                       text: 'Treinar',
                       callback: () => {},
                     ),
+                    const Divider(),
+                    const Text(
+                      'Estatísticas',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                    ),
+                    GridView.count(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisCount: 4,
+                      mainAxisSpacing: 5,
+                      crossAxisSpacing: 5,
+                      childAspectRatio: 0.65,
+                      padding: const EdgeInsets.only(top: 10),
+                      children: [
+                        _statisticsCard('Ataque físico', 0),
+                        _statisticsCard('Ataque mágico', 0),
+                        _statisticsCard('Defesa física', 0),
+                        _statisticsCard('Defesa mágica', 0),
+                        _statisticsCard('Amp. espada', 0),
+                        _statisticsCard('Amp. mágico', 0),
+                        _statisticsCard('Precisão', 0),
+                        _statisticsCard('Dano crítico', 0),
+                        _statisticsCard('Taxa crítica', 0),
+                        _statisticsCard('Defesa', 0),
+                        _statisticsCard('Evasão', 0),
+                        _statisticsCard('Perfuração', 0),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -274,6 +308,58 @@ class OverviewPage extends ConsumerWidget {
         ),
         bottomNavigationBar: BottomNavigationMenu(scaffoldKey: _scaffoldKey),
         drawer: CustomDrawer(),
+      ),
+    );
+  }
+
+  Widget _statisticsCard(String title, int value) {
+    return Card(
+      color: const Color(0xff1a2739),
+      child: Padding(
+        padding: const EdgeInsets.all(5),
+        child: Column(
+          children: [
+            Expanded(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                height: 30,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.5),
+                  borderRadius: const BorderRadius.all(Radius.circular(3)),
+                  border: Border.all(
+                    color: Colors.black54,
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(2),
+                  child: Center(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        decimalNumberFormat(value),
+                        style: const TextStyle(
+                          height: 0,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

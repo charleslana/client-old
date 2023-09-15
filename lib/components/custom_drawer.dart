@@ -52,7 +52,7 @@ class CustomDrawer extends ConsumerWidget {
             children: [
               Container(
                 width: drawerWidth,
-                color: const Color(0xff392d5f),
+                color: const Color(0xff131f2f),
                 child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: Wrap(
@@ -291,7 +291,7 @@ class CustomDrawer extends ConsumerWidget {
               ),
               Container(
                 padding: const EdgeInsets.all(10),
-                color: const Color(0xff4b426d),
+                color: const Color(0xff1a2739),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -332,65 +332,65 @@ class CustomDrawer extends ConsumerWidget {
                 ),
               ),
               Expanded(
-                child: ListView(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  children: [
-                    ListTile(
-                      leading: const Icon(Icons.person),
-                      title: const Text('Trocar de personagem'),
-                      subtitle:
-                          const Text('Selecione outro personagem da conta'),
-                      onTap: logoutCharacter,
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.exit_to_app),
-                      title: const Text('Fazer logout'),
-                      subtitle: const Text('Sair da conta'),
-                      onTap: logout,
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.list),
-                      title: const Text('List'),
-                      subtitle: const Text('Subtitle'),
-                      onTap: logout,
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.list),
-                      title: const Text('List'),
-                      subtitle: const Text('Subtitle'),
-                      onTap: logout,
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.list),
-                      title: const Text('List'),
-                      subtitle: const Text('Subtitle'),
-                      onTap: logout,
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.list),
-                      title: const Text('List'),
-                      subtitle: const Text('Subtitle'),
-                      onTap: logout,
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.list),
-                      title: const Text('List'),
-                      subtitle: const Text('Subtitle'),
-                      onTap: logout,
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.list),
-                      title: const Text('List'),
-                      subtitle: const Text('Subtitle'),
-                      onTap: logout,
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.list),
-                      title: const Text('List'),
-                      subtitle: const Text('Subtitle'),
-                      onTap: logout,
-                    ),
-                  ],
+                child: Container(
+                  color: const Color(0xff1a2739),
+                  child: ListView(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    children: [
+                      ListTile(
+                        leading: const Icon(
+                          Icons.person,
+                          color: Colors.white,
+                        ),
+                        title: const Text(
+                          'Trocar de personagem',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        subtitle: const Text(
+                          'Selecione outro personagem da conta',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        onTap: logoutCharacter,
+                      ),
+                      ListTile(
+                        leading: const Icon(
+                          Icons.exit_to_app,
+                          color: Colors.white,
+                        ),
+                        title: const Text(
+                          'Fazer logout',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        subtitle: const Text(
+                          'Sair da conta',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        onTap: logout,
+                      ),
+                      Column(
+                        children: List.generate(
+                          10,
+                          (index) {
+                            return ListTile(
+                              leading: const Icon(
+                                Icons.list,
+                                color: Colors.white,
+                              ),
+                              title: const Text(
+                                'List',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              subtitle: const Text(
+                                'Subtitle',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              onTap: () {},
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
