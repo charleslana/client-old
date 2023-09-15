@@ -331,10 +331,9 @@ class CustomDrawer extends ConsumerWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 5),
               Expanded(
                 child: ListView(
-                  padding: EdgeInsets.zero,
+                  padding: const EdgeInsets.symmetric(vertical: 5),
                   children: [
                     ListTile(
                       leading: const Icon(Icons.person),
