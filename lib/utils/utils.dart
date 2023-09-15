@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 import '../data/images.dart';
 import '../routes/app_routes.dart';
@@ -207,4 +208,17 @@ Future<void> showConfirmationDialog(
       );
     },
   );
+}
+
+String numberAbbreviation(int number) {
+  final String stringNumber = number.toString();
+  final double doubleNumber = double.tryParse(stringNumber) ?? 0;
+  final NumberFormat numberFormat = NumberFormat.compact();
+  return numberFormat.format(doubleNumber);
+}
+
+String decimalNumberFormat(int number) {
+  final NumberFormat numberFormat = NumberFormat.decimalPattern();
+  final formatted = numberFormat.format(number);
+  return formatted.replaceAll(',', '.');
 }

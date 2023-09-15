@@ -47,3 +47,5 @@ const String pvpIcon = 'assets/images/icons/pvp_icon.png';
 const String questIcon = 'assets/images/icons/quest_icon.png';
 const String rankIcon = 'assets/images/icons/rank_icon.png';
 const String worldIcon = 'assets/images/icons/world_icon.png';
+const String goldIcon = 'assets/images/icons/gold_icon.png';
+const String diamondIcon = 'assets/images/icons/diamond_icon.png';
