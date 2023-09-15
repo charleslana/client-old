@@ -222,3 +222,40 @@ String decimalNumberFormat(int number) {
   final formatted = numberFormat.format(number);
   return formatted.replaceAll(',', '.');
 }
+
+Future<void> showAlertDialog(BuildContext context, String message,
+    [String? title]) async {
+  await showDialog<dynamic>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: title != null
+            ? Center(
+                child: Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              )
+            : null,
+        content: SingleChildScrollView(
+          child: Text(
+            message,
+            style: const TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),
+        backgroundColor: const Color(0xff131f2f),
+        actions: [
+          TextButton(
+            child: const Text('Fechar'),
+            onPressed: () => close(context),
+          ),
+        ],
+      );
+    },
+  );
+}

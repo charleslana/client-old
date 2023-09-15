@@ -205,7 +205,17 @@ class OverviewPage extends ConsumerWidget {
                             Align(
                               alignment: Alignment.topRight,
                               child: IconButton(
-                                onPressed: () {},
+                                onPressed: () => showAlertDialog(
+                                    context,
+                                    '''
+FOR - Aumenta o atributo de FORÇA dos personagens, garantindo os seguintes status:
+HP; Ataque; Redução de Danos; Resistência à Queda; Ignorar Perfuração.\n
+INT - Aumenta o atributo de INTELIGÊNCIA dos personagens, garantindo os seguintes status:
+Ataque Mágico; Resistência à Taxa Crítica; Resistência aos Danos Críticos; Resistência à Técnica Amp; Resistência à Investida; Resistência ao Atordoamento.\n
+DES - Aumenta o atributo de DESTREZA dos personagens, garantindo os seguintes status:
+Precisão; Evasão; Bloqueio; Resistência à Imobilidade; Resistência à Queda.
+                                    ''',
+                                    'Atributos'),
                                 icon: const Icon(
                                   Icons.info,
                                   color: Colors.white,
@@ -298,6 +308,18 @@ class OverviewPage extends ConsumerWidget {
                         _statisticsCard('Defesa', 0),
                         _statisticsCard('Evasão', 0),
                         _statisticsCard('Perfuração', 0),
+                        _statisticsCard('Ignorar evasão', 0),
+                        _statisticsCard('Dano adicional', 0),
+                        _statisticsCard('Bloqueio', 0),
+                        _statisticsCard('Resistência a taxa crítica', 0),
+                        _statisticsCard('Resistência a dano crítico', 0),
+                        _statisticsCard('Ignorar perfuração', 0),
+                        _statisticsCard('Ignorar precisão', 0),
+                        _statisticsCard('Resistência a técnica amp.', 0),
+                        _statisticsCard('Redução de danos', 0),
+                        _statisticsCard('Resistência à queda', 0),
+                        _statisticsCard('Resistência a atordoamento', 0),
+                        _statisticsCard('Resistência a imobilidade', 0),
                       ],
                     ),
                   ],
