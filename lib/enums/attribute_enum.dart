@@ -2,6 +2,7 @@ enum AttributeEnum {
   strength,
   intelligence,
   dexterity,
+  undefined,
 }
 
 extension AttributeExtension on AttributeEnum {

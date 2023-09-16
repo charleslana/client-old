@@ -93,7 +93,7 @@ class OverviewPage extends ConsumerWidget {
                       ),
                       const SizedBox(height: 20),
                       DropdownButtonFormField<AttributeEnum>(
-                        value: selectedAttribute,
+                        value: AttributeEnum.undefined,
                         onChanged: (newValue) {
                           setState(() {
                             selectedAttribute = newValue;
@@ -101,6 +101,8 @@ class OverviewPage extends ConsumerWidget {
                         },
                         items: [
                           const DropdownMenuItem<AttributeEnum>(
+                            value: AttributeEnum.undefined,
+                            enabled: false,
                             child: Text(
                               'Escolha um atributo',
                               style: TextStyle(
@@ -154,7 +156,8 @@ class OverviewPage extends ConsumerWidget {
                           ),
                         ),
                         validator: (selectedValue) {
-                          if (selectedValue == null) {
+                          if (selectedValue == null ||
+                              selectedValue == AttributeEnum.undefined) {
                             return 'Campo do atributo é obrigatório';
                           }
                           return null;
