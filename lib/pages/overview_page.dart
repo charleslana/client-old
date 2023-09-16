@@ -194,7 +194,7 @@ class OverviewPage extends ConsumerWidget {
                         style: const TextStyle(color: Colors.white),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Campo do atributo é obrigatório';
+                            return 'Campo do pontos do atributo é obrigatório';
                           }
                           final intValue = int.tryParse(value);
                           if (intValue == null) {
