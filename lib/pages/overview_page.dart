@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../components/attribute_bar.dart';
@@ -6,8 +8,12 @@ import '../components/bottom_navigation_menu.dart';
 import '../components/custom_drawer.dart';
 import '../components/custom_shader_mask.dart';
 import '../data/images.dart';
+import '../enums/attribute_enum.dart';
+import '../helpers/handler_error.dart';
+import '../models/attribute.dart';
 import '../models/attribute_status.dart';
 import '../providers/user_character_provider.dart';
+import '../services/user_character_service.dart';
 import '../utils/character_utils.dart';
 import '../utils/style_utils.dart';
 import '../utils/utils.dart';
@@ -17,10 +23,223 @@ class OverviewPage extends ConsumerWidget {
   OverviewPage({super.key});
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _userCharacter = UserCharacterService();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userCharacter = ref.read(userCharacterProvider);
+    final userCharacter = ref.watch(userCharacterProvider);
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+    Future<void> getProfile() async {
+      try {
+        final userCharacter = await _userCharacter.getProfile();
+        _userCharacter.saveUserCharacter(ref, userCharacter);
+      } catch (e) {
+        print(e);
+      }
+    }
+
+    Future<void> addAttribute(AttributeEnum? attribute, String point) async {
+      if (formKey.currentState!.validate() && attribute != null) {
+        try {
+          showLoading(context);
+          final parsePoint = int.parse(point);
+          await _userCharacter.updateAttribute(
+              Attribute(attribute: attribute, point: parsePoint));
+          await getProfile();
+          if (context.mounted) {
+            closeAll(context);
+          }
+        } on DioException catch (e) {
+          if (context.mounted) {
+            close(context);
+            await getError(e, context);
+          }
+        }
+      }
+    }
+
+    Future<void> showAttributeDialog() async {
+      await showDialog<dynamic>(
+        context: context,
+        builder: (BuildContext context) {
+          AttributeEnum? selectedAttribute;
+          final pointController = TextEditingController(text: '0');
+
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              insetPadding: const EdgeInsets.all(10),
+              title: const Center(
+                child: Text(
+                  'Distribuir pontos',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              content: SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        'Você possui ${decimalNumberFormat(userCharacter.point)} ponto(s) para distribuir',
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      DropdownButtonFormField<AttributeEnum>(
+                        value: selectedAttribute,
+                        onChanged: (newValue) {
+                          setState(() {
+                            selectedAttribute = newValue;
+                          });
+                        },
+                        items: [
+                          const DropdownMenuItem<AttributeEnum>(
+                            child: Text(
+                              'Escolha um atributo',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          DropdownMenuItem<AttributeEnum>(
+                            value: AttributeEnum.strength,
+                            child: Text(
+                              AttributeEnum.strength.label,
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          DropdownMenuItem<AttributeEnum>(
+                            value: AttributeEnum.intelligence,
+                            child: Text(
+                              AttributeEnum.intelligence.label,
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          DropdownMenuItem<AttributeEnum>(
+                            value: AttributeEnum.dexterity,
+                            child: Text(
+                              AttributeEnum.dexterity.label,
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Selecione um atributo',
+                          labelStyle: TextStyle(
+                            color: Colors.white,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.white,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        validator: (selectedValue) {
+                          if (selectedValue == null) {
+                            return 'Campo do atributo é obrigatório';
+                          }
+                          return null;
+                        },
+                        dropdownColor: Colors.black,
+                        isExpanded: true,
+                        elevation: 1,
+                        icon: const Icon(
+                          Icons.arrow_drop_down,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: pointController,
+                        cursorColor: Colors.white,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Pontos',
+                          labelStyle: TextStyle(
+                            color: Colors.white,
+                          ),
+                          hintText: '0',
+                          hintStyle: TextStyle(color: Colors.white),
+                          errorMaxLines: 2,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.white,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        style: const TextStyle(color: Colors.white),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Campo do atributo é obrigatório';
+                          }
+                          final intValue = int.tryParse(value);
+                          if (intValue == null) {
+                            return 'O valor deve ser um número inteiro';
+                          }
+                          if (intValue < 1 || intValue > 999) {
+                            return 'O valor deve ser entre 1 e 999';
+                          }
+                          if (intValue > userCharacter.point) {
+                            return 'Não pode inserir um valor maior que o seu limite ${userCharacter.point}';
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.allow(
+                            RegExp('[1-9][0-9]*'),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      IconButton(
+                        onPressed: () => addAttribute(
+                            selectedAttribute, pointController.text),
+                        icon: const Icon(
+                          Icons.add,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              backgroundColor: const Color(0xff131f2f),
+              actions: [
+                TextButton(
+                  child: const Text('Fechar'),
+                  onPressed: () => close(context),
+                ),
+              ],
+            );
+          });
+        },
+      );
+    }
 
     return SafeArea(
       child: Scaffold(
@@ -276,7 +495,7 @@ Precisão; Evasão; Bloqueio; Resistência à Imobilidade; Resistência à Queda
                     const SizedBox(height: 15),
                     Button4Widget(
                       text: 'Treinar',
-                      callback: () => {},
+                      callback: showAttributeDialog,
                     ),
                     const Divider(),
                     const Text(

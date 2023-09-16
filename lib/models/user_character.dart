@@ -113,7 +113,7 @@ class UserCharacter {
       'spentPoint': spentPoint,
       'gold': gold,
       'experience': experience,
-      'gender': gender,
+      'gender': gender.name,
       'createdAt': createdAt.toIso8601String(),
       'character': character.toMap(),
       'groupMember': groupMember?.toMap(),

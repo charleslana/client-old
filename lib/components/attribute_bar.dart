@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/attribute_status.dart';
+import '../utils/utils.dart';
 
 class AttributeBar extends StatelessWidget {
   const AttributeBar({
@@ -43,7 +44,7 @@ class AttributeBar extends StatelessWidget {
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         Text(
-                          attributeStatus.value.toString(),
+                          decimalNumberFormat(attributeStatus.value),
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 20,
@@ -63,7 +64,7 @@ class AttributeBar extends StatelessWidget {
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         Text(
-                          attributeStatus.baseValue.toString(),
+                          decimalNumberFormat(attributeStatus.baseValue),
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 14,

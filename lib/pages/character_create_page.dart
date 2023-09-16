@@ -164,8 +164,18 @@ class _CharacterCreatePageState extends ConsumerState<CharacterCreatePage> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Card(
+                        color: Colors.black.withOpacity(0.1),
+                        margin: const EdgeInsets.only(bottom: 10),
                         child: ExpansionTile(
-                          title: Text(_characterSelected.name),
+                          textColor: Colors.white,
+                          iconColor: Colors.white,
+                          collapsedIconColor: Colors.white,
+                          title: Text(
+                            _characterSelected.name,
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
                           onExpansionChanged: (expanded) {
                             setState(() {
                               _isExpanded = expanded;
@@ -177,19 +187,29 @@ class _CharacterCreatePageState extends ConsumerState<CharacterCreatePage> {
                               padding: const EdgeInsets.all(16),
                               child: Text(
                                 _characterSelected.description ?? '',
-                                style: const TextStyle(fontSize: 16),
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
                               ),
                             ),
                           ],
                         ),
                       ),
                       Card(
+                        color: Colors.black.withOpacity(0.1),
+                        margin: const EdgeInsets.only(bottom: 10),
                         child: Padding(
                           padding: const EdgeInsets.all(10),
                           child: Column(
                             children: [
                               ListTile(
-                                title: const Text('Gênero'),
+                                title: const Text(
+                                  'Gênero',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
                                 contentPadding: const EdgeInsets.all(0),
                                 subtitle: GestureDetector(
                                   child: Row(
@@ -203,6 +223,17 @@ class _CharacterCreatePageState extends ConsumerState<CharacterCreatePage> {
                                         child: Row(
                                           children: [
                                             Radio<GenderEnum>(
+                                              fillColor: MaterialStateProperty
+                                                  .resolveWith<Color>(
+                                                      (Set<MaterialState>
+                                                          states) {
+                                                if (states.contains(
+                                                    MaterialState.disabled)) {
+                                                  return Colors.white
+                                                      .withOpacity(.32);
+                                                }
+                                                return Colors.white;
+                                              }),
                                               value: GenderEnum.male,
                                               groupValue: _genderSelected,
                                               onChanged: (value) {
@@ -211,7 +242,12 @@ class _CharacterCreatePageState extends ConsumerState<CharacterCreatePage> {
                                                 });
                                               },
                                             ),
-                                            const Text('Masculino'),
+                                            const Text(
+                                              'Masculino',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -224,6 +260,17 @@ class _CharacterCreatePageState extends ConsumerState<CharacterCreatePage> {
                                         child: Row(
                                           children: [
                                             Radio<GenderEnum>(
+                                              fillColor: MaterialStateProperty
+                                                  .resolveWith<Color>(
+                                                      (Set<MaterialState>
+                                                          states) {
+                                                if (states.contains(
+                                                    MaterialState.disabled)) {
+                                                  return Colors.white
+                                                      .withOpacity(.32);
+                                                }
+                                                return Colors.white;
+                                              }),
                                               value: GenderEnum.female,
                                               groupValue: _genderSelected,
                                               onChanged: (value) {
@@ -232,7 +279,12 @@ class _CharacterCreatePageState extends ConsumerState<CharacterCreatePage> {
                                                 });
                                               },
                                             ),
-                                            const Text('Feminino'),
+                                            const Text(
+                                              'Feminino',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -243,14 +295,35 @@ class _CharacterCreatePageState extends ConsumerState<CharacterCreatePage> {
                               Form(
                                 key: _formKey,
                                 child: ListTile(
-                                  title: const Text('Nome'),
+                                  title: const Padding(
+                                    padding: EdgeInsets.only(bottom: 5),
+                                    child: Text(
+                                      'Nome',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
                                   contentPadding: const EdgeInsets.all(0),
                                   subtitle: TextFormField(
                                     controller: _nameController,
+                                    cursorColor: Colors.white,
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                       errorMaxLines: 2,
+                                      hintStyle: TextStyle(color: Colors.white),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.white,
+                                        ),
+                                      ),
                                     ),
+                                    style: const TextStyle(color: Colors.white),
                                     validator:
                                         CreateCharacterValidator.validateName,
                                   ),
