@@ -30,10 +30,19 @@ class OverviewPage extends ConsumerWidget {
     final userCharacter = ref.watch(userCharacterProvider);
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+    Future<void> getUserCharacters() async {
+      try {
+        await _userCharacter.getAll(ref);
+      } catch (e) {
+        print(e);
+      }
+    }
+
     Future<void> getProfile() async {
       try {
         final userCharacter = await _userCharacter.getProfile();
         _userCharacter.saveUserCharacter(ref, userCharacter);
+        await getUserCharacters();
       } catch (e) {
         print(e);
       }

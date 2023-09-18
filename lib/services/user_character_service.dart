@@ -5,14 +5,18 @@ import '../models/attribute.dart';
 import '../models/create_character.dart';
 import '../models/user_character.dart';
 import '../providers/user_character_provider.dart';
+import 'shared_local_storage_service.dart';
 
 class UserCharacterService {
   final _baseUrl = '/v1/user/character';
   final _apiService = ApiService();
+  final _sharedLocalStorageService = SharedLocalStorageService();
 
-  Future<List<UserCharacter>> getAll() async {
+  Future<List<UserCharacter>> getAll(WidgetRef ref) async {
     final response = await _apiService.fetchData<List<dynamic>>(_baseUrl);
-    return UserCharacter.listFromJson(response.data!);
+    final userCharacters = UserCharacter.listFromJson(response.data!);
+    saveUserCharacters(ref, userCharacters);
+    return userCharacters;
   }
 
   Future<UserCharacter> create(CreateCharacter create) async {
@@ -26,7 +30,10 @@ class UserCharacterService {
   }
 
   Future<void> select(WidgetRef ref, UserCharacter userCharacter) async {
-    await _apiService.fetchData<void>('$_baseUrl/select/${userCharacter.id}');
+    final response = await _apiService
+        .fetchData<void>('$_baseUrl/select/${userCharacter.id}');
+    final cookie = _apiService.getSetCookieFromHeader(response);
+    await _saveCookie(cookie);
     ref.read(userCharacterProvider.notifier).state = userCharacter;
   }
 
@@ -50,5 +57,10 @@ class UserCharacterService {
 
   void saveUserCharacter(WidgetRef ref, UserCharacter userCharacter) {
     ref.read(userCharacterProvider.notifier).state = userCharacter;
+  }
+
+  Future<void> _saveCookie(String cookie) async {
+    await _sharedLocalStorageService.put(
+        _sharedLocalStorageService.cookie, cookie);
   }
 }

@@ -20,6 +20,11 @@ Future<void> getError(DioException e, BuildContext context) async {
       await showForbidden(context);
       return;
     }
+    if (statusCode == 429) {
+      await showInfo(context,
+          'Limitamos o seu acesso no momento, por favor entre contato com o suporte ou aguarde');
+      return;
+    }
     final error = HandleError.fromMap(e.response?.data);
     if (error.errors != null) {
       showToast(context, error.errors!.join(' '), error: true);

@@ -346,8 +346,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   Future<void> _getUserCharacters() async {
     try {
-      final userCharacters = await _userCharacter.getAll();
-      _userCharacter.saveUserCharacters(ref, userCharacters);
+      await _userCharacter.getAll(ref);
     } catch (e) {
       print(e);
     }
