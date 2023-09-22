@@ -63,6 +63,7 @@ class BottomNavigationMenu extends StatelessWidget {
               showModalBottomSheet<dynamic>(
                 backgroundColor: const Color(0xff131f2f),
                 isScrollControlled: true,
+                useSafeArea: true,
                 context: context,
                 builder: (BuildContext context) {
                   return InventoryWidget(items: items);
