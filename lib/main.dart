@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 import 'components/app_route_observer.dart';
 import 'data/load_images.dart';
@@ -16,6 +17,7 @@ void main() async {
     systemNavigationBarColor: Colors.black,
     statusBarColor: Colors.black,
   ));
+  await initializeDateFormatting('pt');
   runApp(const ProviderScope(child: MyApp()));
 }
 

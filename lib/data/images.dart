@@ -49,3 +49,7 @@ const String rankIcon = 'assets/images/icons/rank_icon.png';
 const String worldIcon = 'assets/images/icons/world_icon.png';
 const String goldIcon = 'assets/images/icons/gold_icon.png';
 const String diamondIcon = 'assets/images/icons/diamond_icon.png';
+const String item1 = 'assets/images/items/1.png';
+const String item2 = 'assets/images/items/2.png';
+const String item3 = 'assets/images/items/3.png';
+const String item4 = 'assets/images/items/4.png';

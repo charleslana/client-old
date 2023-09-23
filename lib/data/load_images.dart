@@ -53,5 +53,9 @@ Future<void> loadImages(BuildContext context) async {
     precacheImage(const AssetImage(worldIcon), context),
     precacheImage(const AssetImage(goldIcon), context),
     precacheImage(const AssetImage(diamondIcon), context),
+    precacheImage(const AssetImage(item1), context),
+    precacheImage(const AssetImage(item2), context),
+    precacheImage(const AssetImage(item3), context),
+    precacheImage(const AssetImage(item4), context),
   ]);
 }

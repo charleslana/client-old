@@ -32,6 +32,7 @@ flutter:
     - assets/images/characters/
     - assets/images/characters/portrait/
     - assets/images/classes/
+    - assets/images/items/
 
   fonts:
     - family: NotoSans

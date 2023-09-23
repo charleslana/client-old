@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../components/custom_shader_mask.dart';
 import '../data/images.dart';
@@ -10,6 +11,7 @@ import '../models/user_character.dart';
 import '../providers/user_character_provider.dart';
 import '../providers/user_provider.dart';
 import '../routes/app_routes.dart';
+import '../services/user_character_item_service.dart';
 import '../services/user_character_service.dart';
 import '../services/user_service.dart';
 import '../utils/character_utils.dart';
@@ -29,12 +31,15 @@ class _CharacterChoicePageState extends ConsumerState<CharacterChoicePage> {
   final _availableQuantity = 4;
   final _userService = UserService();
   final _userCharacterService = UserCharacterService();
+  final _userCharacterItemService = UserCharacterItemService();
 
   void _logout() {
     _userService.logout(ref).then((value) => replace(context, loginRoute));
   }
 
   Future<void> _showCharacterDialog(UserCharacter userCharacter) async {
+    final DateFormat formatter = DateFormat.yMMMd('pt');
+
     await showModalBottomSheet<dynamic>(
       backgroundColor: Colors.transparent,
       barrierColor: Colors.transparent,
@@ -62,23 +67,35 @@ class _CharacterChoicePageState extends ConsumerState<CharacterChoicePage> {
                     if (userCharacter.level < 100 &&
                         userCharacter.groupMember?.role !=
                             RoleGroupEnum.leader) ...[
-                      IconButton(
-                        icon: const Icon(
-                          Icons.delete,
-                          color: Colors.white,
+                      Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
                         ),
-                        onPressed: () => showConfirmationDialog(
-                            context,
-                            'Deseja realmente excluir o personagem? Está ação é irreversível',
-                            () => _excluir(userCharacter.id)),
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                          ),
+                          onPressed: () => showConfirmationDialog(
+                              context,
+                              'Deseja realmente excluir o personagem? Está ação é irreversível',
+                              () => _excluir(userCharacter.id)),
+                        ),
                       ),
                     ],
-                    IconButton(
-                      icon: const Icon(
-                        Icons.close,
-                        color: Colors.white,
+                    Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.blue,
+                        shape: BoxShape.circle,
                       ),
-                      onPressed: () => close(context),
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.close,
+                          color: Colors.white,
+                        ),
+                        onPressed: () => close(context),
+                      ),
                     ),
                   ],
                 ),
@@ -164,6 +181,33 @@ class _CharacterChoicePageState extends ConsumerState<CharacterChoicePage> {
                     ),
                   ),
                 ),
+                Card(
+                  elevation: 0,
+                  margin: const EdgeInsets.only(bottom: 10),
+                  color: Colors.black.withOpacity(0.3),
+                  child: Padding(
+                    padding: const EdgeInsets.all(3),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Flexible(
+                          child: Text(
+                            'Data de criação',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          formatter.format(userCharacter.createdAt),
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 50),
                 Button3Widget(
                   text: 'Selecionar',
@@ -200,6 +244,7 @@ class _CharacterChoicePageState extends ConsumerState<CharacterChoicePage> {
     try {
       showLoading(context);
       await _userCharacterService.select(ref, userCharacter);
+      await _getUserCharacterItems();
       if (context.mounted) {
         replace(context, overviewRoute);
       }
@@ -208,6 +253,14 @@ class _CharacterChoicePageState extends ConsumerState<CharacterChoicePage> {
         close(context);
         await getError(e, context);
       }
+    }
+  }
+
+  Future<void> _getUserCharacterItems() async {
+    try {
+      await _userCharacterItemService.getAll(ref);
+    } catch (e) {
+      print(e);
     }
   }
 
