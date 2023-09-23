@@ -58,6 +58,7 @@ class InventoryWidget extends ConsumerWidget {
                   ),
                   const SizedBox(height: 20),
                   GridView.count(
+                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     crossAxisCount: 4,
                     children: [
@@ -125,6 +126,7 @@ class InventoryWidget extends ConsumerWidget {
                   ),
                   const SizedBox(height: 20),
                   GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
