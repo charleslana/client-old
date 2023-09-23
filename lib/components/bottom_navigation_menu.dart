@@ -15,11 +15,6 @@ class BottomNavigationMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<InventoryItem> items = [
-      InventoryItem('Item 1'),
-      InventoryItem('Item 2'),
-    ];
-
     return Theme(
       data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
       child: BottomNavigationBar(
@@ -66,7 +61,7 @@ class BottomNavigationMenu extends StatelessWidget {
                 useSafeArea: true,
                 context: context,
                 builder: (BuildContext context) {
-                  return InventoryWidget(items: items);
+                  return const InventoryWidget();
                 },
               );
               break;
