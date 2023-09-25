@@ -8,6 +8,7 @@ class UserCharacterItem {
     this.equipped,
     required this.item,
     this.quantity,
+    this.enhancement,
   });
 
   factory UserCharacterItem.fromMap(Map<String, dynamic> map) {
@@ -16,6 +17,8 @@ class UserCharacterItem {
       equipped: map['equipped'] != null ? map['equipped'] as bool : null,
       item: Item.fromMap(map['item'] as Map<String, dynamic>),
       quantity: map['quantity'] != null ? map['quantity'] as int : null,
+      enhancement:
+          map['enhancement'] != null ? map['enhancement'] as int : null,
     );
   }
 
@@ -25,6 +28,7 @@ class UserCharacterItem {
   final bool? equipped;
   final Item item;
   final int? quantity;
+  final int? enhancement;
 
   static List<UserCharacterItem> listFromJson(List<dynamic> list) =>
       List<UserCharacterItem>.from(
@@ -36,12 +40,14 @@ class UserCharacterItem {
     bool? equipped,
     Item? item,
     int? quantity,
+    int? enhancement,
   }) {
     return UserCharacterItem(
       id: id ?? this.id,
       equipped: equipped ?? this.equipped,
       item: item ?? this.item,
       quantity: quantity ?? this.quantity,
+      enhancement: enhancement ?? this.enhancement,
     );
   }
 
@@ -51,6 +57,7 @@ class UserCharacterItem {
       'equipped': equipped,
       'item': item.toMap(),
       'quantity': quantity,
+      'enhancement': enhancement,
     };
   }
 

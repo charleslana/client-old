@@ -69,16 +69,22 @@ class InventoryWidget extends ConsumerWidget {
                     shrinkWrap: true,
                     crossAxisCount: 4,
                     children: [
-                      _getItemSlot(equippedItems, ItemEquipmentTypeEnum.weapon),
-                      _getItemSlot(equippedItems, ItemEquipmentTypeEnum.chest),
                       _getItemSlot(
-                          equippedItems, ItemEquipmentTypeEnum.earring),
-                      _getItemSlot(equippedItems, ItemEquipmentTypeEnum.glove),
-                      _getItemSlot(equippedItems, ItemEquipmentTypeEnum.head),
+                          context, equippedItems, ItemEquipmentTypeEnum.weapon),
                       _getItemSlot(
-                          equippedItems, ItemEquipmentTypeEnum.necklace),
-                      _getItemSlot(equippedItems, ItemEquipmentTypeEnum.ring),
-                      _getItemSlot(equippedItems, ItemEquipmentTypeEnum.shoe),
+                          context, equippedItems, ItemEquipmentTypeEnum.chest),
+                      _getItemSlot(context, equippedItems,
+                          ItemEquipmentTypeEnum.earring),
+                      _getItemSlot(
+                          context, equippedItems, ItemEquipmentTypeEnum.glove),
+                      _getItemSlot(
+                          context, equippedItems, ItemEquipmentTypeEnum.head),
+                      _getItemSlot(context, equippedItems,
+                          ItemEquipmentTypeEnum.necklace),
+                      _getItemSlot(
+                          context, equippedItems, ItemEquipmentTypeEnum.ring),
+                      _getItemSlot(
+                          context, equippedItems, ItemEquipmentTypeEnum.shoe),
                     ],
                   ),
                   Padding(
@@ -111,20 +117,24 @@ class InventoryWidget extends ConsumerWidget {
 
                         return Stack(
                           children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                color: const Color(0xff131f2f),
-                                border: Border.all(
-                                  color: const Color(0xff6e7b8c),
-                                  width: 2,
+                            InkWell(
+                              onTap: () =>
+                                  _showItemDetails(context, userCharacterItem),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: const Color(0xff131f2f),
+                                  border: Border.all(
+                                    color: const Color(0xff6e7b8c),
+                                    width: 2,
+                                  ),
                                 ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(2),
-                                child: Center(
-                                  child: Image.asset(
-                                    getItemImage(userCharacterItem.item.id),
-                                    fit: BoxFit.contain,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(2),
+                                  child: Center(
+                                    child: Image.asset(
+                                      getItemImage(userCharacterItem.item.id),
+                                      fit: BoxFit.contain,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -134,23 +144,25 @@ class InventoryWidget extends ConsumerWidget {
                               Positioned(
                                 right: 0,
                                 bottom: 0,
-                                child: Container(
-                                  width: 20,
-                                  height: 20,
-                                  padding: const EdgeInsets.all(2),
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Center(
-                                    child: FittedBox(
-                                      fit: BoxFit.scaleDown,
-                                      child: Text(
-                                        userCharacterItem.quantity.toString(),
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
+                                child: IgnorePointer(
+                                  child: Container(
+                                    width: 20,
+                                    height: 20,
+                                    padding: const EdgeInsets.all(2),
+                                    decoration: BoxDecoration(
+                                      color: Colors.blue,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Center(
+                                      child: FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        child: Text(
+                                          userCharacterItem.quantity.toString(),
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -192,25 +204,33 @@ class InventoryWidget extends ConsumerWidget {
     );
   }
 
-  Widget _getItemSlot(List<UserCharacterItem> equippedItems,
+  Widget _getItemSlot(
+      BuildContext context,
+      List<UserCharacterItem> equippedItems,
       ItemEquipmentTypeEnum equipmentType) {
     if (equippedItems
         .where((element) => element.item.equipmentType == equipmentType)
         .isNotEmpty) {
-      return Container(
-        decoration: BoxDecoration(
-          color: const Color(0xff131f2f),
-          border: Border.all(
-            color: const Color(0xff6e7b8c),
-            width: 2,
+      final userCharacterItem = equippedItems
+          .firstWhere((element) => element.item.equipmentType == equipmentType);
+
+      return InkWell(
+        onTap: () => _showItemDetails(context, userCharacterItem),
+        child: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xff131f2f),
+            border: Border.all(
+              color: const Color(0xff6e7b8c),
+              width: 2,
+            ),
           ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(5),
-          child: Center(
-            child: Image.asset(
-              getItemImage(1),
-              fit: BoxFit.contain,
+          child: Padding(
+            padding: const EdgeInsets.all(5),
+            child: Center(
+              child: Image.asset(
+                getItemImage(userCharacterItem.item.id),
+                fit: BoxFit.contain,
+              ),
             ),
           ),
         ),
@@ -240,5 +260,127 @@ class InventoryWidget extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _showItemDetails(
+      BuildContext context, UserCharacterItem userCharacterItem) async {
+    await showDialog<dynamic>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            '${userCharacterItem.item.name} ${userCharacterItem.enhancement != null && userCharacterItem.enhancement! > 0 ? '+${userCharacterItem.enhancement}' : ''}',
+            style: const TextStyle(
+              color: Colors.white,
+            ),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: SizedBox(
+                        width: 60,
+                        height: 60,
+                        child: Image.asset(
+                          getItemImage(userCharacterItem.item.id),
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      child: Column(
+                        children: [
+                          _getItemStatus(true),
+                          _getItemStatus(true),
+                          _getItemStatus(true),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          backgroundColor: const Color(0xff131f2f),
+          actions: [
+            IconButton(
+              icon: const Icon(
+                Icons.delete,
+                color: Colors.red,
+              ),
+              onPressed: () => {},
+            ),
+            const SizedBox(height: 10),
+            TextButton(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.orange,
+              ),
+              child: const Text('Vender'),
+              onPressed: () => {},
+            ),
+            const SizedBox(height: 10),
+            TextButton(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.green,
+              ),
+              child: const Text('Equipar'),
+              onPressed: () => {},
+            ),
+            const SizedBox(height: 10),
+            TextButton(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.purple,
+              ),
+              child: const Text('Aprimorar'),
+              onPressed: () => {},
+            ),
+            const SizedBox(height: 10),
+            TextButton(
+              child: const Text('Fechar'),
+              onPressed: () => close(context),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _getItemStatus(bool exist) {
+    if (exist) {
+      return Card(
+        elevation: 0,
+        margin: const EdgeInsets.only(bottom: 5),
+        color: Colors.black.withOpacity(0.3),
+        child: const Padding(
+          padding: EdgeInsets.all(3),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                child: Text(
+                  'FOR',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              Flexible(
+                child: Text(
+                  '+2',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+    return Container();
   }
 }
